@@ -1,45 +1,34 @@
-import * as React from "react";
-import { useSelector } from "react-redux";
-import { Routes, Route, Link } from "react-router-dom";
-const  Home=()=> {
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Routes, Route, Navigate, BrowserRouter, Link } from "react-router-dom";
+import LoginForm from "./components/pages/user/loginPage";
+import SignupForm from "./components/pages/user/signupPage";
+import ProductList from "./components/shared/ProductList";
+
+import { userActions } from "./store/user-slice";
+export default function App() {
+  const dispatch = useDispatch();
+  const isAuth = useSelector((state) => state.user.isAuth);
+  useEffect(() => {
+    dispatch(userActions.fetchUserFromLocal());
+  }, [isAuth, dispatch]);
+
+  console.log(isAuth);
   return (
-    <>
-      <main>
-        <h2>Welcome to the homepage!</h2>
-        <p>You can do this, I believe in you.</p>
-      </main>
+    <BrowserRouter>
       <nav>
-        <Link to="/about">About</Link>
+        <h1> Order List </h1>
+        <Link to={"/"}> home</Link>
+        <Link to={"/login"}> login</Link>
       </nav>
-    </>
-  );
-}
-
-function About() {
-  return (
-    <>
-      <main>
-        <h2>Who are we?</h2>
-        <p>That feels like an existential question, don't you think?</p>
-      </main>
-      <nav>
-        <Link to="/">Home</Link>
-      </nav>
-    </>
-  );
-}
-
-export function App() {
-
-  const user=useSelector(state=>state.user.user)
-  console.log(user)
-  return (
-    <div>
-      <h1>Welcome to React Router!</h1>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="about" element={<About />} />
+        <Route
+          path="/"
+          element={!isAuth ? <Navigate to="/login" /> : <ProductList />}
+        />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/signup" element={<SignupForm />} />
       </Routes>
-    </div>
+    </BrowserRouter>
   );
-} // App.js
+}
