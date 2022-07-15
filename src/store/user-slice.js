@@ -6,9 +6,10 @@ const userSlice = createSlice({
 
   reducers: {
     fetchUserFromLocal(state) {
-      const localUser = JSON.parse(localStorage.getItem("user"));
-console.log(localUser)
-      if (localUser.name) {
+      var userFromlocal = localStorage.getItem("user");
+      const localUser = JSON.parse(userFromlocal);
+
+      if (localUser) {
         state.responseUser = {
           id: localUser.id,
           name: localUser.name,
@@ -17,6 +18,8 @@ console.log(localUser)
         };
         state.isAuth = true;
       }
+      console.log("local is bos");
+      return;
     },
     createdUser(state, action) {
       state.responseUser = {
@@ -26,6 +29,11 @@ console.log(localUser)
         email: action.payload.email,
       };
       state.isAuth = true;
+    },
+    logout(state) {
+      localStorage.clear();
+      state.responseUser = null;
+      state.isAuth = false;
     },
   },
 });

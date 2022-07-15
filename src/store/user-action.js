@@ -20,29 +20,22 @@ export const createUser = ({ user }) => {
         },
       };
       const responsedata = await axios(options);
+
       return responsedata;
     };
     try {
       const responsedata = await rawResponse(user);
-      console.log(responsedata.data);
-      if (responsedata.status === 200) {
-        JSON.stringify(
-          localStorage.setItem("user", {
-            id: responsedata.data.id,
-            name: responsedata.data.name,
-            surname: responsedata.data.surname,
-            email: responsedata.data.email,
-          })
-        );
+      const newuser = {
+        id: responsedata.data.id,
+        name: responsedata.data.name,
+        surname: responsedata.data.surname,
+        email: responsedata.data.email,
+      };
 
-        dispatch(
-          userActions.createdUser({
-            id: responsedata.data.id,
-            name: responsedata.data.name,
-            surname: responsedata.data.surname,
-            email: responsedata.data.email,
-          })
-        );
+      if (responsedata.status === 200) {
+        localStorage.setItem("user", JSON.stringify(newuser));
+        console.log(JSON.parse(localStorage.getItem("user")));
+        dispatch(userActions.createdUser({ newuser }));
       }
     } catch (err) {
       console.log(err.response.status);

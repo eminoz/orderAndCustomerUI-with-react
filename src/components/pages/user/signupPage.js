@@ -1,5 +1,6 @@
-import React, {  useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Button, Form, Grid, Segment } from "semantic-ui-react";
 import { createUser } from "../../../store/user-action";
 
@@ -9,15 +10,16 @@ const SignupForm = () => {
   const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
- 
+  
+  let isAuth = useSelector((state) => state.user.isAuth);
+  const navigate = useNavigate();
+  useEffect(() => {
+    isAuth && navigate("/");
+  }, [isAuth, navigate]);
+
   const creatUser = () => {
     const user = { name, surname, mail, password };
     dispatch(createUser({ user }));
-
-    // setName("");
-    // setSurname("");
-    // setMail("");
-    // setPassword("");
   };
   return (
     <Grid textAlign="center" style={{ height: "100vh" }} verticalAlign="middle">
