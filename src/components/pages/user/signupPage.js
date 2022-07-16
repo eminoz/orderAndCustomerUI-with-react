@@ -10,7 +10,7 @@ const SignupForm = () => {
   const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  
+
   let isAuth = useSelector((state) => state.user.isAuth);
   const navigate = useNavigate();
   useEffect(() => {
